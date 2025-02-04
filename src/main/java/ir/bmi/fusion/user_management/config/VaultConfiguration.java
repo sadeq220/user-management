@@ -9,6 +9,7 @@ import org.springframework.vault.authentication.SessionManager;
 import org.springframework.vault.client.VaultEndpoint;
 import org.springframework.vault.config.AbstractVaultConfiguration;
 import org.springframework.vault.support.VaultToken;
+import org.springframework.web.client.RestOperations;
 
 @Configuration
 public class VaultConfiguration extends AbstractVaultConfiguration {
@@ -29,13 +30,16 @@ public class VaultConfiguration extends AbstractVaultConfiguration {
 
     @Override
     public ClientAuthentication clientAuthentication() {
+        return clientAuthentication(restOperations());
+    }
+    public ClientAuthentication clientAuthentication(RestOperations restOperations){
         // AppRole authentication consists of two hard to guess (secret) tokens: RoleId and SecretId.
         AppRoleAuthenticationOptions appRoleOptions = AppRoleAuthenticationOptions.builder()
                 .roleId(AppRoleAuthenticationOptions.RoleId.provided(vaultAppRoleAuthRoleID))
                 .secretId(AppRoleAuthenticationOptions.SecretId.wrapped(VaultToken.of(vaultAppRoleAuthWrappingToken)))
                 .build();
 
-        return new AppRoleAuthentication(appRoleOptions, restOperations());
+        return new AppRoleAuthentication(appRoleOptions, restOperations);
     }
 
     /**
