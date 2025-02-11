@@ -6,11 +6,11 @@ import org.hibernate.annotations.SoftDelete;
 import org.hibernate.annotations.SoftDeleteType;
 
 /**
- * softDeleted entities cannot be mapped as LAZY association
+ *  *-to-one softDeleted associations cann't be LAZY fetched
  */
 @MappedSuperclass
 @SoftDelete(strategy = SoftDeleteType.ACTIVE,columnName = "active")
-public class AbstractBaseModel {
+public abstract class AbstractBaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter

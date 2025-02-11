@@ -12,7 +12,7 @@ public class UserDomain extends AbstractBaseModel{
     private String firstName;
     private String lastName;
 
-    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy = "userDomain")
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "userDomain")
     private List<UserRoleJoinTable> userRoles = new ArrayList<>();
 
 }

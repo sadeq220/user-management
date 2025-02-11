@@ -8,7 +8,7 @@ import lombok.Setter;
 @Table(name = "ROLE_PERMISSION")
 @Setter
 @Getter
-public class RolePermissionJoinTable extends AbstractBaseModel{
+public class RolePermissionJoinTable extends AbstractExpirableBaseModel{
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ROLE_ID")
@@ -17,22 +17,4 @@ public class RolePermissionJoinTable extends AbstractBaseModel{
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "PERMISSION_ID")
     private PermissionDomain permissionDomain;
-
-    @Override
-    public int hashCode() {
-        return 1; // to ensure consistent hash code between entity state transitions, because id is null when entity is in transient state
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        if (!(obj instanceof RolePermissionJoinTable)) {
-            return false;
-        }
-        RolePermissionJoinTable rolePermissionJoinTable = (RolePermissionJoinTable) obj;
-        return this.getId() != null && this.getId().equals(rolePermissionJoinTable.getId());
-    }
-
 }

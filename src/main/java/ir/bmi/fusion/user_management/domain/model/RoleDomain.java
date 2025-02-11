@@ -11,7 +11,7 @@ public class RoleDomain extends AbstractBaseModel {
     private String name;
     private String type;
 
-    @OneToMany(fetch = FetchType.EAGER,
+    @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "roleDomain",
             cascade = CascadeType.ALL)
     private List<RolePermissionJoinTable> permissions = new ArrayList<>();
