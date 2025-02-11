@@ -1,4 +1,4 @@
-package ir.bmi.fusion.user_management.config;
+package ir.bmi.fusion.user_management.infrastructure.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

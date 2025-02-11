@@ -1,4 +1,4 @@
-package ir.bmi.fusion.user_management.config;
+package ir.bmi.fusion.user_management.infrastructure.config;
 
 import com.zaxxer.hikari.HikariDataSource;
 import org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy;

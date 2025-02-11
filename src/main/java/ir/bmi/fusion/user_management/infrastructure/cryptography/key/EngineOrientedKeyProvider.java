@@ -1,7 +1,6 @@
-package ir.bmi.fusion.user_management.cryptography.key;
+package ir.bmi.fusion.user_management.infrastructure.cryptography.key;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import ir.bmi.fusion.user_management.domain.port.outbound.KeyProviderPort;
 import org.springframework.stereotype.Service;
 import org.springframework.vault.core.VaultKeyValueOperationsSupport;
 import org.springframework.vault.core.VaultOperations;

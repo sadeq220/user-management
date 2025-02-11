@@ -1,7 +1,6 @@
 package ir.bmi.fusion.user_management;
 
-import ir.bmi.fusion.user_management.config.VaultPropertySourceRegisterer;
-import org.springframework.boot.SpringApplication;
+import ir.bmi.fusion.user_management.infrastructure.config.VaultPropertySourceRegisterer;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 

@@ -1,4 +1,4 @@
-package ir.bmi.fusion.user_management.config;
+package ir.bmi.fusion.user_management.infrastructure.config;
 
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.support.GenericApplicationContext;
