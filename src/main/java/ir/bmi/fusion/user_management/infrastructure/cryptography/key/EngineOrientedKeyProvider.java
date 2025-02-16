@@ -1,6 +1,7 @@
 package ir.bmi.fusion.user_management.infrastructure.cryptography.key;
 
 import ir.bmi.fusion.user_management.domain.port.outbound.KeyProviderPort;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.vault.core.VaultKeyValueOperationsSupport;
 import org.springframework.vault.core.VaultOperations;
@@ -18,6 +19,7 @@ import java.util.Base64;
 import java.util.Map;
 
 @Service
+@Profile("!test")
 public class EngineOrientedKeyProvider implements KeyProviderPort {
 
     private final ECKeyPair ecKeyPair;

@@ -2,6 +2,7 @@ package ir.bmi.fusion.user_management.infrastructure.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.vault.authentication.AppRoleAuthentication;
 import org.springframework.vault.authentication.AppRoleAuthenticationOptions;
 import org.springframework.vault.authentication.ClientAuthentication;
@@ -12,6 +13,7 @@ import org.springframework.vault.support.VaultToken;
 import org.springframework.web.client.RestOperations;
 
 @Configuration
+@Profile("!test")
 public class VaultConfiguration extends AbstractVaultConfiguration {
 
     private final String vaultAppRoleAuthRoleID;
