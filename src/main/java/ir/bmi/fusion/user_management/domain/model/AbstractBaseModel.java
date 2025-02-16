@@ -6,7 +6,8 @@ import org.hibernate.annotations.SoftDelete;
 import org.hibernate.annotations.SoftDeleteType;
 
 /**
- *  *-to-one softDeleted associations cann't be LAZY fetched
+ *  *-to-one softDeleted associations can't be LAZY fetched
+ *  to support batch insert and update, don't use Identity column id generation
  */
 @MappedSuperclass
 @SoftDelete(strategy = SoftDeleteType.ACTIVE,columnName = "active")
@@ -18,5 +19,22 @@ public abstract class AbstractBaseModel {
 
     @Column(insertable=false, updatable=false)
     private Boolean active;
+
+    @Override
+    public int hashCode() {
+        return 1; // to ensure consistent hash code between entity state transitions, because id is null when entity is in transient state
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof AbstractBaseModel)) {
+            return false;
+        }
+        AbstractBaseModel abstractBaseModel = (AbstractBaseModel) obj;
+        return this.getId() != null && this.getId().equals(abstractBaseModel.getId());
+    }
 
 }

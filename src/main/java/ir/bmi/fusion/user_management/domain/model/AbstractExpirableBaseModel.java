@@ -20,20 +20,12 @@ public abstract class AbstractExpirableBaseModel extends AbstractBaseModel {
     private void setup(){
         fromDate=Instant.now();
     }
-    @Override
-    public int hashCode() {
-        return 1; // to ensure consistent hash code between entity state transitions, because id is null when entity is in transient state
-    }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        if (!(obj instanceof UserRoleJoinTable)) {
+    public boolean isExpired() {
+        if (toDate == null) {
             return false;
+        } else {
+            return Instant.now().isAfter(toDate);
         }
-        UserRoleJoinTable userRoleJoinTable = (UserRoleJoinTable) obj;
-        return this.getId() != null && this.getId().equals(userRoleJoinTable.getId());
     }
 }
