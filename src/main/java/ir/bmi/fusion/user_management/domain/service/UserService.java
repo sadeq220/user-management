@@ -3,6 +3,7 @@ package ir.bmi.fusion.user_management.domain.service;
 import ir.bmi.fusion.user_management.domain.model.UserDomain;
 import ir.bmi.fusion.user_management.domain.port.inbound.UserPort;
 import ir.bmi.fusion.user_management.domain.port.outbound.UserRepository;
+import ir.bmi.fusion.user_management.domain.port.value.UserCreationValue;
 import ir.bmi.fusion.user_management.domain.port.value.UserValue;
 import ir.bmi.fusion.user_management.domain.service.mapper.UserDomainMapper;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,8 @@ public class UserService implements UserPort {
     }
 
     @Override
-    public UserValue addUser(UserValue userValue) {
-        UserDomain userDomain = userDomainMapper.toDomain(userValue);
+    public UserValue addUser(UserCreationValue userCreationValue) {
+        UserDomain userDomain = userDomainMapper.toDomain(userCreationValue);
         UserDomain savedUserDomain = userRepository.saveUser(userDomain);
         return userDomainMapper.toValue(savedUserDomain);
     }

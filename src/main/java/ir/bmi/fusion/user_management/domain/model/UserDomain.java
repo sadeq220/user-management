@@ -1,9 +1,11 @@
 package ir.bmi.fusion.user_management.domain.model;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,10 +20,20 @@ public class UserDomain extends AbstractBaseModel{
 
     private String firstName;
     private String lastName;
+    private String nationalCode;
+    private String personalCode;
+    private String ssoId;
+    private String username;
+
+    @Setter(AccessLevel.NONE)
+    private Instant createDate;
 
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "userDomain")
     private List<UserRoleJoinTable> userRoles = new ArrayList<>();
-
+    @PrePersist
+    private void prePersistCallback(){
+        this.createDate=Instant.now();
+    }
     public List<RoleDomain> getRoles(){
         return this.userRoles.stream().filter(userRoleJoinTable -> !userRoleJoinTable.isExpired()).map(UserRoleJoinTable::getRoleDomain).toList();
     }
