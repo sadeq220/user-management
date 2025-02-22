@@ -1,13 +1,17 @@
 package ir.bmi.fusion.user_management.domain.model;
 
 import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreRemove;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.Instant;
 
 @MappedSuperclass
+@Setter
+@Getter
 public abstract class AbstractExpirableBaseModel extends AbstractBaseModel {
+
     private Instant fromDate;
     private Instant toDate;
 
@@ -16,16 +20,14 @@ public abstract class AbstractExpirableBaseModel extends AbstractBaseModel {
         this.toDate = Instant.now();
     }
 
-    @PrePersist
-    private void setup(){
-        fromDate=Instant.now();
-    }
 
     public boolean isExpired() {
         if (toDate == null) {
-            return false;
-        } else {
+            return fromDate!=null && Instant.now().isBefore(fromDate);
+        } else if (fromDate == null) {
             return Instant.now().isAfter(toDate);
+        } else {
+            return Instant.now().isAfter(toDate) || Instant.now().isBefore(fromDate);
         }
     }
 }

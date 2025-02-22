@@ -5,6 +5,8 @@ import lombok.Getter;
 import org.hibernate.annotations.SoftDelete;
 import org.hibernate.annotations.SoftDeleteType;
 
+import java.time.Instant;
+
 /**
  *  *-to-one softDeleted associations can't be LAZY fetched
  *  to support batch insert and update, don't use Identity column id generation
@@ -17,8 +19,13 @@ public abstract class AbstractBaseModel {
     @Getter
     private Long id;
 
-    @Column(insertable=false, updatable=false)
-    private Boolean active;
+    @Getter
+    private Instant createDate;
+
+    @PrePersist
+    private void prePersistCallback(){
+        this.createDate=Instant.now();
+    }
 
     @Override
     public int hashCode() {
