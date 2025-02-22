@@ -28,9 +28,8 @@ public class PermissionDomain extends AbstractBaseModel {
             mappedBy = "permissionDomain")
     private List<RolePermissionJoinTable> rolePermissionJoinTableList = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER) //*-to-one softDeleted associations can't be LAZY fetched
     @JoinColumn(name = "ParentId",referencedColumnName = "code")
     private PermissionDomain parentPermission;
-
 
 }
