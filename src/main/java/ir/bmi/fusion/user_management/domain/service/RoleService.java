@@ -9,10 +9,12 @@ import ir.bmi.fusion.user_management.domain.port.value.RoleCreationValue;
 import ir.bmi.fusion.user_management.domain.port.value.RoleValue;
 import ir.bmi.fusion.user_management.domain.service.mapper.RoleDomainMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class RoleService implements RolePort {
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;

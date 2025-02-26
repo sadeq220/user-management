@@ -18,4 +18,9 @@ public class PermissionJpaRepository implements PermissionRepository {
     public Optional<PermissionDomain> get(Long id) {
         return permissionJpaRepositoryDAO.getPermissionWithOneLevelParentJoining(id);
     }
+
+    @Override
+    public PermissionDomain save(PermissionDomain permissionDomain) {
+        return permissionJpaRepositoryDAO.save(permissionDomain);
+    }
 }

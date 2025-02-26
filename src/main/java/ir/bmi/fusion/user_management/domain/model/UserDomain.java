@@ -30,12 +30,11 @@ public class UserDomain extends AbstractBaseModel{
 
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "userDomain")
     private List<UserRoleJoinTable> userRoles = new ArrayList<>();
-    @PrePersist
-    private void prePersistCallback(){
-        this.createDate=Instant.now();
-    }
+
     public List<RoleDomain> getRoles(){
-        return this.userRoles.stream().filter(userRoleJoinTable -> !userRoleJoinTable.isExpired()).map(UserRoleJoinTable::getRoleDomain).toList();
+        return this.userRoles.stream()
+                .filter(userRoleJoinTable -> !userRoleJoinTable.isExpired())
+                .map(UserRoleJoinTable::getRoleDomain).toList();
     }
     public void addRole(RoleDomain roleDomain){
         if (this.getRoles().contains(roleDomain)) {
