@@ -12,6 +12,5 @@ public class PermissionDto {
     private String name;
     private String code;
     private String value;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private PermissionValue parentPermission;
+    private Long parentId;
 }
