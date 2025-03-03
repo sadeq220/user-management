@@ -33,9 +33,7 @@ public class RoleService implements RolePort {
                 .map(permissionRepository::get)
                 .map(permissionDomainOptional -> permissionDomainOptional.orElseThrow(()->new RuntimeException("")) )//TODO change exception to business exception
                 .toList();
-        RoleDomain roleDomain = new RoleDomain();
-        roleDomain.setCode(roleDomain.getCode());
-        roleDomain.setName(roleDomain.getName());
+        RoleDomain roleDomain = roleDomainMapper.toDomain(roleCreationValue);
         permissionDomains.forEach(roleDomain::addPermission);
 
         RoleDomain savedRoleDomain = roleRepository.saveRole(roleDomain);
