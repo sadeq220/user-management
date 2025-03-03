@@ -40,6 +40,7 @@ public class RoleDomain extends AbstractBaseModel {
     }
     public List<PermissionDomain> getPermissions(){
         return permissions.stream()
+                .filter(joinTable-> !joinTable.isExpired())
                 .map(RolePermissionJoinTable::getPermissionDomain)
                 .toList();
     }

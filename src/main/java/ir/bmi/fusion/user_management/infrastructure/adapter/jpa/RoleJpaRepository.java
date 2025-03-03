@@ -4,6 +4,8 @@ import ir.bmi.fusion.user_management.domain.model.RoleDomain;
 import ir.bmi.fusion.user_management.domain.port.outbound.RoleRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public class RoleJpaRepository implements RoleRepository {
     private final RoleJpaRepositoryDAO roleJpaRepositoryDAO;
@@ -18,5 +20,10 @@ public class RoleJpaRepository implements RoleRepository {
     public RoleDomain saveRole(RoleDomain roleDomain) {
         permissionJpaRepositoryDAO.saveAll(roleDomain.getPermissions());
         return roleJpaRepositoryDAO.save(roleDomain);
+    }
+
+    @Override
+    public Optional<RoleDomain> getRole(Long id) {
+        return roleJpaRepositoryDAO.findById(id);
     }
 }

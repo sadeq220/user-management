@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface PermissionJpaRepositoryDAO extends JpaRepository<PermissionDomain,Long> {
-    @Query("SELECT per FROM permission per JOIN fetch per.parentPermission WHERE per.id = :id")
+    @Query("SELECT per FROM permission per LEFT JOIN FETCH per.parentPermission WHERE per.id = :id")
     Optional<PermissionDomain> getPermissionWithOneLevelParentJoining(@Param("id")Long id);
 }
