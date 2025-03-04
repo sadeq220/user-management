@@ -19,8 +19,9 @@ public class UserController {
         this.userDtoMapper = userDtoMapper;
     }
     @GetMapping
-    public UserCreationInputDto readUserInfo(@RequestParam("id") String id){
-        return null;
+    public UserInfoDto readUserInfo(@RequestParam("id") String id){
+        UserValue userValue = userPort.getUser(Long.valueOf(id));
+        return userDtoMapper.toDto(userValue);
     }
     @PostMapping
     public UserInfoDto createUser(@RequestBody UserCreationInputDto userCreationInputDto){

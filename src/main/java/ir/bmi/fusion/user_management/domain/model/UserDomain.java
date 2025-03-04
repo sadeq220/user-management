@@ -8,6 +8,8 @@ import lombok.Setter;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * aggregate root
@@ -42,6 +44,12 @@ public class UserDomain extends AbstractBaseModel{
         } else {
             addRoleWithoutCheck(roleDomain);
         }
+    }
+    public Set<PermissionDomain> getPermissions(){
+        return this.getRoles()
+                .stream()
+                .flatMap(roleDomain -> roleDomain.getPermissions().stream())
+                .collect(Collectors.toSet());
     }
     private void addRoleWithoutCheck(RoleDomain roleDomain){
         UserRoleJoinTable userRoleJoinTable = new UserRoleJoinTable();

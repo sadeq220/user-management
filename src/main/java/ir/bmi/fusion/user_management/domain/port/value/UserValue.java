@@ -1,6 +1,7 @@
 package ir.bmi.fusion.user_management.domain.port.value;
 
 import java.time.Instant;
+import java.util.List;
 
 public record UserValue(Long id,
                         String firstName,
@@ -9,5 +10,7 @@ public record UserValue(Long id,
                         String personalCode,
                         String ssoId,
                         String username,
-                        Instant createDate) {
+                        Instant createDate,
+                        List<PermissionValue> permissions,
+                        List<RoleValue> roles) {
 }

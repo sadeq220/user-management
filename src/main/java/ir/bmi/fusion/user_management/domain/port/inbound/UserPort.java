@@ -5,4 +5,5 @@ import ir.bmi.fusion.user_management.domain.port.value.UserValue;
 
 public interface UserPort {
     UserValue addUser(UserCreationValue userCreationValue);
+    UserValue getUser(Long id);
 }
