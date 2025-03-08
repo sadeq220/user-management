@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface UserJpaRepositoryDAO extends JpaRepository<UserDomain,Long> {
     @Query("SELECT user FROM UserDomain user " +
             "LEFT JOIN FETCH user.userRoles roles " +
-            "JOIN FETCH roles.roleDomain role " +
+            "LEFT JOIN FETCH roles.roleDomain role " +
             "WHERE user.id=:id")
     Optional<UserDomain> getUser(@Param("id") Long id);
 }

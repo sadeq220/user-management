@@ -30,7 +30,7 @@ public class UserDomain extends AbstractBaseModel{
     @Setter(AccessLevel.NONE)
     private Instant createDate;
 
-    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "userDomain")
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "userDomain",orphanRemoval = true)
     private List<UserRoleJoinTable> userRoles = new ArrayList<>();
 
     public List<RoleDomain> getRoles(){
@@ -57,12 +57,21 @@ public class UserDomain extends AbstractBaseModel{
         userRoleJoinTable.setUserDomain(this);
         userRoles.add(userRoleJoinTable);
     }
-    public void setUserRoles(List<RoleDomain> roleDomains){
-        List<RoleDomain> currentRoles = this.getRoles();
-        for (RoleDomain roleDomain: roleDomains){
-            if (!currentRoles.contains(roleDomain)) {
-                addRoleWithoutCheck(roleDomain);
+    public void setUserRoles(List<RoleDomain> newRoles){
+        List<RoleDomain> shouldAddedRoles= new ArrayList<>(newRoles);
+        List<UserRoleJoinTable> shouldRemovedRoles= new ArrayList<>();
+        this.userRoles.forEach(joinTable->{
+            if (newRoles.contains(joinTable.getRoleDomain())){
+                shouldAddedRoles.remove(joinTable.getRoleDomain());
+            } else {
+                joinTable.setUserDomain(null);
+                shouldRemovedRoles.add(joinTable);
+
             }
+                });
+        this.userRoles.removeAll(shouldRemovedRoles);
+        for (RoleDomain roleDomain: shouldAddedRoles){
+                addRoleWithoutCheck(roleDomain);
         }
     }
 

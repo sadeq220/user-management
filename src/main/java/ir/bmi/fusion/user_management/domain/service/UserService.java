@@ -46,10 +46,21 @@ public class UserService implements UserPort {
 
     @Override
     public UserValue getUser(Long id) {
-        UserDomain userDomain = userRepository.getUser(id).orElseThrow(() -> new UserNotFoundException(id));
-        List<Long> roleIds = userDomain.getRoles().stream().map(AbstractBaseModel::getId).toList();
-        roleRepository.getRoles(roleIds);//to fetch all roles in one query
+        UserDomain userDomain = this.getUserDomain(id);
         return userDomainMapper.toValue(userDomain);
     }
 
+    @Override
+    public UserValue setRoles(Long id, List<Long> roleIds) {
+        List<RoleDomain> roleDomains = roleRepository.getRoles(roleIds);
+        UserDomain userDomain = getUserDomain(id);
+        userDomain.setUserRoles(roleDomains);
+        return userDomainMapper.toValue(userDomain);
+    }
+    private UserDomain getUserDomain(Long id){
+        UserDomain userDomain = userRepository.getUser(id).orElseThrow(() -> new UserNotFoundException(id));
+        List<Long> roleIds = userDomain.getRoles().stream().map(AbstractBaseModel::getId).toList();
+        roleRepository.getRoles(roleIds);//to fetch all roles in one query
+        return userDomain;
+    }
 }
