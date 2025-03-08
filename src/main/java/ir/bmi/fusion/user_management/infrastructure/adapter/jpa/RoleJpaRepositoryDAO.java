@@ -13,7 +13,7 @@ public interface RoleJpaRepositoryDAO extends JpaRepository<RoleDomain,Long> {
     @Query("SELECT role FROM RoleDomain role " +
             "JOIN FETCH role.permissions permissions " +
             "JOIN FETCH permissions.permissionDomain permission " +
-            "JOIN FETCH permission.parentPermission parentPermission " +
+            "LEFT JOIN FETCH permission.parentPermission parentPermission " +
             "WHERE role.id IN :roleIds")
     List<RoleDomain> getRoles(@Param("roleIds") List<Long> roleIds);
 }
