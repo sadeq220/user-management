@@ -3,6 +3,7 @@ package ir.bmi.fusion.user_management.unit;
 import ir.bmi.fusion.user_management.domain.model.UserDomain;
 import ir.bmi.fusion.user_management.domain.port.inbound.UserPort;
 import ir.bmi.fusion.user_management.domain.port.outbound.RoleRepository;
+import ir.bmi.fusion.user_management.domain.port.outbound.UserEventPublisher;
 import ir.bmi.fusion.user_management.domain.port.outbound.UserRepository;
 import ir.bmi.fusion.user_management.domain.port.value.UserCreationValue;
 import ir.bmi.fusion.user_management.domain.port.value.UserValue;
@@ -30,7 +31,8 @@ public class UserPortTest {
         this.userRepository = mockedUserRepository;
         UserDomainMapper mapper = Mappers.getMapper(UserDomainMapper.class);
         this.userDomainMapper=mapper;
-        userPort = new UserService(mockedUserRepository,mapper,roleRepository);
+        UserEventPublisher userEventPublisher = Mockito.mock(UserEventPublisher.class);
+        userPort = new UserService(mockedUserRepository,mapper,roleRepository,userEventPublisher);
     }
     @Test
     void Add_User_Test(){

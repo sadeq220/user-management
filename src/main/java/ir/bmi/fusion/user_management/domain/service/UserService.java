@@ -5,6 +5,7 @@ import ir.bmi.fusion.user_management.domain.model.RoleDomain;
 import ir.bmi.fusion.user_management.domain.model.UserDomain;
 import ir.bmi.fusion.user_management.domain.port.inbound.UserPort;
 import ir.bmi.fusion.user_management.domain.port.outbound.RoleRepository;
+import ir.bmi.fusion.user_management.domain.port.outbound.UserEventPublisher;
 import ir.bmi.fusion.user_management.domain.port.outbound.UserRepository;
 import ir.bmi.fusion.user_management.domain.port.value.UserCreationValue;
 import ir.bmi.fusion.user_management.domain.port.value.UserValue;
@@ -22,11 +23,16 @@ public class UserService implements UserPort {
     private final UserRepository userRepository;
     private final UserDomainMapper userDomainMapper;
     private final RoleRepository roleRepository;
+    private final UserEventPublisher userEventPublisher;
 
-    public UserService(UserRepository userRepository, UserDomainMapper userDomainMapper, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository,
+                       UserDomainMapper userDomainMapper,
+                       RoleRepository roleRepository,
+                       UserEventPublisher userEventPublisher) {
         this.userRepository = userRepository;
         this.userDomainMapper = userDomainMapper;
         this.roleRepository = roleRepository;
+        this.userEventPublisher = userEventPublisher;
     }
 
     @Override
@@ -41,7 +47,9 @@ public class UserService implements UserPort {
                 .toList();
         userRoles.forEach(userDomain::addRole);
         UserDomain savedUserDomain = userRepository.saveUser(userDomain);
-        return userDomainMapper.toValue(savedUserDomain);
+        UserValue userValue = userDomainMapper.toValue(savedUserDomain);
+        userEventPublisher.userCreated(userValue);
+        return userValue;
     }
 
     @Override
