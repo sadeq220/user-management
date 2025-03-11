@@ -10,7 +10,7 @@ public class UserManagementApplication {
 	public static void main(String[] args) {
 		// fluent API to build an ApplicationContext hierarchy, customize environment and context
 		new SpringApplicationBuilder(UserManagementApplication.class)
-				.initializers(new VaultPropertySourceRegisterer())
+				//.initializers(new VaultPropertySourceRegisterer())
 				.run(args);
 	}
 

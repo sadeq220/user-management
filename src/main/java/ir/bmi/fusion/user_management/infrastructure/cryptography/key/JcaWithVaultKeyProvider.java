@@ -1,6 +1,8 @@
 package ir.bmi.fusion.user_management.infrastructure.cryptography.key;
 
 import ir.bmi.fusion.user_management.domain.port.outbound.KeyProviderPort;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.vault.core.VaultKeyValueOperationsSupport;
@@ -18,15 +20,20 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.Map;
 
+/**
+ * JCA key provider with HCP Vault as backend storage
+ */
 @Service
 @Profile("!test")
-public class EngineOrientedKeyProvider implements KeyProviderPort {
+@Primary
+@ConditionalOnProperty(name = "java.cryptography.storage.vault",havingValue = "true")
+public class JcaWithVaultKeyProvider implements KeyProviderPort {
 
     private final ECKeyPair ecKeyPair;
     private final EdECKeyPair edECKeyPair;
 
 
-    public EngineOrientedKeyProvider(VaultOperations vaultOperations) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public JcaWithVaultKeyProvider(VaultOperations vaultOperations,JcaKeyProvider jcaKeyProvider) throws NoSuchAlgorithmException, InvalidKeySpecException {
         VaultResponse storedEC = vaultOperations.opsForKeyValue("kv/", VaultKeyValueOperationsSupport.KeyValueBackend.KV_2).get("user-management/ec");
         if (storedEC!=null){
             // Step 1: Create a KeyFactory for the EC (Elliptic Curve) algorithm
@@ -35,10 +42,7 @@ public class EngineOrientedKeyProvider implements KeyProviderPort {
 
             this.ecKeyPair=new ECKeyPair((ECPrivateKey) keyPairHolder.privateKey,(ECPublicKey) keyPairHolder.publicKey);
         } else {
-            KeyPairGenerator ec = KeyPairGenerator.getInstance("EC");
-            ec.initialize(256);// NIST p-256
-            KeyPair keyPair = ec.generateKeyPair();
-            this.ecKeyPair = new ECKeyPair((ECPrivateKey) keyPair.getPrivate(), (ECPublicKey) keyPair.getPublic());
+            this.ecKeyPair = jcaKeyProvider.provideEllipticCurveKeys();
             vaultOperations.opsForKeyValue("kv/", VaultKeyValueOperationsSupport.KeyValueBackend.KV_2).put("user-management/ec",
                     Map.of("prik", this.ecKeyPair.ecPrivateKey().getEncoded(), "pubk", this.ecKeyPair.ecPublicKey().getEncoded()));
         }
@@ -51,11 +55,7 @@ public class EngineOrientedKeyProvider implements KeyProviderPort {
 
             this.edECKeyPair = new EdECKeyPair((EdECPrivateKey) keyPairHolder.privateKey, (EdECPublicKey) keyPairHolder.publicKey);
         } else {
-            //
-            // Create a KeyPairGenerator for EdDSA (Ed25519 curve)
-            KeyPairGenerator edDSA = KeyPairGenerator.getInstance("EdDSA");
-            KeyPair edDSAKayPair = edDSA.generateKeyPair();
-            this.edECKeyPair = new EdECKeyPair((EdECPrivateKey) edDSAKayPair.getPrivate(), (EdECPublicKey) edDSAKayPair.getPublic());
+            this.edECKeyPair = jcaKeyProvider.provideEdwardECKeys();
             vaultOperations.opsForKeyValue("kv/", VaultKeyValueOperationsSupport.KeyValueBackend.KV_2).put("user-management/edDSA",
                     Map.of("prik", this.edECKeyPair.edECPrivateKey().getEncoded(), "pubk", this.edECKeyPair.edECPublicKey().getEncoded()));
         }
